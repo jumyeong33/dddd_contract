@@ -1,12 +1,12 @@
-const Helloworld = artifacts.require("Helloworld");
+const MyNFT = artifacts.require("MyNFT");
 const fs = require("fs");
 
 module.exports = function (deployer) {
-  deployer.deploy(Helloworld, "Hello smart contract world").then(() => {
-    if (Helloworld._json) {
+  deployer.deploy(MyNFT).then(() => {
+    if (MyNFT._json) {
       fs.writeFile(
-        "deployedABI_Helloworld",
-        JSON.stringify(Helloworld._json.abi),
+        "deployedABI_DduckDdack",
+        JSON.stringify(MyNFT._json.abi),
         (err) => {
           if (err) throw err;
           console.log("파일에 ABI 입력 성공");
@@ -14,7 +14,7 @@ module.exports = function (deployer) {
       );
     }
 
-    fs.writeFile("deployedAddress_Helloworld", Helloworld.address, (err) => {
+    fs.writeFile("deployedAddress_DduckDdack", MyNFT.address, (err) => {
       if (err) throw err;
       console.log("파일에 주소 입력 성공");
     });

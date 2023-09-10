@@ -1,5 +1,5 @@
 require("dotenv").config();
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 const HDWalletProviderKlaytn = require("truffle-hdwallet-provider-klaytn");
 const {
   INFURA_KEY,
@@ -22,6 +22,18 @@ module.exports = {
       },
       port: 8545,
       network_id: 1,
+    },
+    mumbai: {
+      provider: () => {
+        return new HDWalletProvider(
+          PRIVATE_KEY_ETH,
+          `https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`
+        );
+      },
+      network_id: 80001,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: false,
     },
     ropsten: {
       provider: () => {
@@ -47,7 +59,7 @@ module.exports = {
     },
     ganache: {
       host: "localhost",
-      port: 8545,
+      port: 7545,
       network_id: "*",
     },
     bscTestnet: {
@@ -101,13 +113,13 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "^0.8.0",
+      version: "0.8.4",
       settings: {
         optimizer: {
           enabled: true,
           runs: 200,
         },
-        // evmVersion: "", //basically verstion defult, petersburg, istanbul use petersburg for klaytn
+        // evmVersion: "istanbul", //basically verstion defult, petersburg, istanbul use petersburg for klaytn
       },
     },
   },
