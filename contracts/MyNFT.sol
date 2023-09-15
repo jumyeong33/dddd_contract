@@ -3,16 +3,15 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MyNFT is ERC721Enumerable, ERC721URIStorage, Ownable {
+contract MyNFT is ERC721Enumerable, ERC721URIStorage {
   address public mintingContract;
-  bool public paused = false;
   mapping(uint256 => bool) public wallPapperKeys;
 
   constructor() ERC721("MyNFT", "MNT") {}
 
-  function setMintingContract(address _mintingContract) external onlyOwner {
+  function setMintingContract(address _mintingContract) external {
+    require(address(0) == mintingContract, "Minting contract set only once");
     mintingContract = _mintingContract;
   }
 
@@ -24,7 +23,6 @@ contract MyNFT is ERC721Enumerable, ERC721URIStorage, Ownable {
     uint256 _wallPapperKey,
     string memory _tokenURI
   ) external onlyMintingContract returns (uint256 _tokenId) {
-    require(!paused);
     registerWallPapperKey(_wallPapperKey);
 
     _tokenId = totalSupply() + 1;
@@ -32,10 +30,6 @@ contract MyNFT is ERC721Enumerable, ERC721URIStorage, Ownable {
     _setTokenURI(_tokenId, _tokenURI);
 
     return _tokenId;
-  }
-
-  function pause(bool _state) public onlyOwner {
-    paused = _state;
   }
 
   modifier onlyMintingContract() {
